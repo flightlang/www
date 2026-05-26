@@ -1,0 +1,11 @@
+<footer class="footer">
+  <div class="container" style="display:flex; justify-content: space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:.6rem;">
+      <img src="{{ '/assets/logo.svg' | relative_url }}" alt="" style="height:20px;width:20px;opacity:.9;">
+      <span class="small">© {{ site.time | date: '%Y' }} FlightLang</span>
+    </div>
+    <div class="small">
+      <a href="{{ '/docs/' | relative_url }}">Docs</a> · <a href="{{ '/blog/' | relative_url }}">Blog</a> · <a href="https://github.com/flightlang" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>

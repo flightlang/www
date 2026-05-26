@@ -1,0 +1,26 @@
+---
+layout: default
+title: Blog
+description: Updates and technical notes on FlightLang, UAV mission design, safety contracts, and drone mission tooling.
+---
+<header class="hero">
+  <div class="container">
+    <span class="badge">Blog</span>
+    <h1>FlightLang Blog</h1>
+    <p class="lead">Updates and technical notes on UAV mission design, safety contracts, and drone mission tooling.</p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <div class="blog-grid">
+      {% for post in site.posts %}
+        <a class="card post-card" href="{{ post.url | relative_url }}">
+          <span class="post-meta">{{ post.date | date: "%B %-d, %Y" }}</span>
+          <h2>{{ post.title }}</h2>
+          {% if post.description %}<p class="small">{{ post.description }}</p>{% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</main>

@@ -1,0 +1,17 @@
+title: FlightLang
+description: FlightLang is a domain-specific language (DSL) for defining drone missions as clear, type-safe state machines.
+url: "https://flightlang.com"
+baseurl: ""
+permalink: /:title/
+
+markdown: kramdown
+highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock

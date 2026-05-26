@@ -1,0 +1,24 @@
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <img src="{{ '/assets/logo.svg' | relative_url }}" alt="FlightLang logo">
+      <span>FlightLang</span>
+    </a>
+    <div class="nav-links">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <a href="{{ '/docs/' | relative_url }}">Docs</a>
+      <a href="{{ '/blog/' | relative_url }}">Blog</a>
+      <a href="https://github.com/flightlang" target="_blank" rel="noopener">GitHub</a>
+      <button id="theme-toggle" class="btn ghost" aria-label="Toggle theme">🌗</button>
+      <a class="btn primary" href="{{ '/docs/#install' | relative_url }}">Get Started</a>
+    </div>
+    <button id="menu-btn" class="btn ghost menu-btn" aria-label="Menu">☰</button>
+  </div>
+  <div id="mobile" class="mobile container">
+    <a href="{{ '/' | relative_url }}">Home</a>
+    <a href="{{ '/docs/' | relative_url }}">Docs</a>
+    <a href="{{ '/blog/' | relative_url }}">Blog</a>
+    <a href="https://github.com/flightlang" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn primary" href="{{ '/docs/#install' | relative_url }}">Get Started</a>
+  </div>
+</nav>

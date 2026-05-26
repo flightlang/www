@@ -1,0 +1,104 @@
+---
+layout: default
+title: FlightLang
+description: FlightLang is a domain-specific language (DSL) for defining drone missions as clear, type-safe state machines.
+---
+<header class="hero">
+  <div class="container grid" style="grid-template-columns: 1.2fr .8fr; align-items:center;">
+    <div>
+      <span class="badge">Early Alpha • Python & Rust backends</span>
+      <h1>Write drone missions like code — <span style="background:linear-gradient(90deg, #2563eb, #14b8a6); -webkit-background-clip:text; background-clip:text; color:transparent;">safe, portable, declarative</span>.</h1>
+      <p class="lead">FlightLang is a domain-specific language (DSL) for UAV missions based on finite state machines, with unit-checked variables, deadlines, and multiple codegen backends (Python for simulation, Rust for controllers).</p>
+      <div class="hero-cta">
+        <a class="btn primary" href="{{ '/docs/#install' | relative_url }}">Install</a>
+        <a class="btn" href="{{ '/docs/' | relative_url }}">Read the docs →</a>
+      </div>
+      <div class="callout" style="margin-top:1rem;">Not for real flight yet — see roadmap and safety notes in the docs.</div>
+    </div>
+    <div class="card code">
+<pre><code class="language-plaintext">// A simple survey mission in FlightLang
+let cruise_alt: m = 60 m
+let max_speed: mps = 12 mps
+
+mission Survey {
+  preflight requires GPS_LOCK && BATTERY > 30%
+  geofence keepout polygon "worksite-a"
+
+  state Idle {
+    on arm -> Takeoff
+  }
+
+  state Takeoff {
+    action climb_to(cruise_alt) @ max_speed
+    on reached_altitude -> Transit
+  }
+
+  state Transit {
+    action goto(waypoint_grid(spacing: 25 m, bearing: 90 deg))
+    on obstacle_detected -> Avoid
+    on grid_complete -> RTL
+  }
+
+  state Avoid {
+    deadline 50 ms
+    action sidestep(5 m) then resume
+    on clear -> Transit
+  }
+
+  state RTL {
+    action return_to_launch()
+    on landed -> Done
+  }
+
+  state Done { }
+}</code></pre>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <h2 class="kicker">Why FlightLang</h2>
+      <div class="grid cards">
+        <div class="card"><h3>Readable mission spec</h3><p class="small">State machines instead of ad-hoc scripts. Preflight checks, deadlines, transitions — all explicit.</p></div>
+        <div class="card"><h3>Units & types</h3><p class="small">Unit-aware numbers (<code>m</code>, <code>mps</code>, <code>deg</code>, <code>ms</code>) with simple checks.</p></div>
+        <div class="card"><h3>Multi-backend</h3><p class="small">Generate Python for simulation or Rust for controllers. PX4/ROS 2 stubs included.</p></div>
+        <div class="card"><h3>Open & extensible</h3><p class="small">Add new actions, events, and backends without changing mission specs.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid" style="grid-template-columns: 1fr 1fr; align-items: start;">
+      <div class="card"><h3>Install (Python)</h3><div class="code"><pre><code class="language-bash"># from your project dir
+python -m flightlang.cli run examples/survey.fl
+
+# or generate runnable Python
+python -m flightlang.cli build examples/survey.fl -o out.py
+python out.py</code></pre></div></div>
+      <div class="card"><h3>Generate Rust</h3><div class="code"><pre><code class="language-bash">python -m flightlang.cli build examples/survey.fl --backend rust --outdir mission_rs
+cd mission_rs && cargo run</code></pre></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="kicker">How it works</h2>
+      <div class="grid cards" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+        <div class="card"><strong>1) Parse</strong><br><span class="small">Lexer & parser build an AST from your <code>.fl</code>.</span></div>
+        <div class="card"><strong>2) Check</strong><br><span class="small">Simple unit/type checks catch mistakes early.</span></div>
+        <div class="card"><strong>3) Generate</strong><br><span class="small">Emit Python or Rust with a tiny runtime or stubs.</span></div>
+        <div class="card"><strong>4) Run</strong><br><span class="small">Simulate or compile; integrate with PX4/ROS 2 later.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container card">
+      <h3>Join the project</h3>
+      <p class="small">We welcome issues, discussions, and PRs. See the roadmap for where help is most needed.</p>
+      <a class="btn" href="https://github.com/flightlang" target="_blank" rel="noopener">Contribute on GitHub →</a>
+    </div>
+  </section>
+</main>

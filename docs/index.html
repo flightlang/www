@@ -1,0 +1,104 @@
+---
+layout: default
+title: FlightLang Docs
+description: Everything you need to install, learn the syntax, and generate code for simulation or controllers.
+---
+<header class="hero">
+  <div class="container">
+    <span class="badge">Documentation</span>
+    <h1>FlightLang Docs</h1>
+    <p class="lead">Everything you need to install, learn the syntax, and generate code for simulation or controllers.</p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container docs">
+    <aside class="toc">
+      <div class="card">
+        <strong>On this page</strong>
+        <a href="#install">Install</a>
+        <a href="#hello">Hello mission</a>
+        <a href="#syntax">Syntax</a>
+        <a href="#actions">Actions & events</a>
+        <a href="#backends">Backends</a>
+        <a href="#roadmap">Roadmap & safety</a>
+      </div>
+    </aside>
+    <article class="content">
+      <section id="install">
+        <h2>Install</h2>
+        <p>FlightLang provides a CLI that compiles <code>.fl</code> into runnable code.</p>
+        <div class="code"><pre><code class="language-bash"># Python backend (run directly)
+python -m flightlang.cli run examples/survey.fl
+
+# Build to a standalone Python file
+python -m flightlang.cli build examples/survey.fl -o out.py
+python out.py
+
+# Generate a Rust crate (Cargo project)
+python -m flightlang.cli build examples/survey.fl --backend rust --outdir mission_rs
+cd mission_rs && cargo run</code></pre></div>
+      </section>
+
+      <section id="hello">
+        <h2>Hello mission</h2>
+        <div class="code"><pre><code class="language-plaintext">mission Hello {
+  state Idle {
+    on arm -> Takeoff
+  }
+  state Takeoff {
+    action climb_to(20 m)
+    on reached_altitude -> RTL
+  }
+  state RTL {
+    action return_to_launch()
+    on landed -> Done
+  }
+  state Done { }
+}</code></pre></div>
+        <p class="small">Run it with <code>python -m flightlang.cli run hello.fl</code>.</p>
+      </section>
+
+      <section id="syntax">
+        <h2>Syntax</h2>
+        <ul>
+          <li><strong>Variables with units</strong>: <code>let cruise_alt: m = 60 m</code></li>
+          <li><strong>States</strong> contain <em>actions</em>, <em>transitions</em>, and optional <em>deadlines</em>.</li>
+          <li><strong>Expressions</strong> support numbers, strings, identifiers, and simple calls such as <code>waypoint_grid(...)</code>.</li>
+        </ul>
+      </section>
+
+      <section id="actions">
+        <h2>Actions & events</h2>
+        <p>Actions map to platform behaviors; events trigger transitions:</p>
+        <div class="grid cards">
+          <div class="card"><code>climb_to(alt)</code><br><span class="small">Optional: <code>@ speed</code></span></div>
+          <div class="card"><code>goto(waypoint_grid(...))</code></div>
+          <div class="card"><code>sidestep(dist) then resume</code></div>
+          <div class="card"><code>return_to_launch()</code></div>
+        </div>
+        <p class="small">Events are user-defined, such as <code>arm</code>, <code>reached_altitude</code>, and <code>grid_complete</code>.</p>
+      </section>
+
+      <section id="backends">
+        <h2>Backends</h2>
+        <ul>
+          <li><strong>Python</strong>: generates runnable Python with a tiny runtime for deterministic simulation.</li>
+          <li><strong>Rust</strong>: generates a Cargo project with action stubs; integrate with PX4/ROS 2 as needed.</li>
+        </ul>
+        <div class="callout">PX4/ROS 2 integrations are provided as <em>stubs</em>. Do not use for real flight without proper integration and testing.</div>
+      </section>
+
+      <section id="roadmap">
+        <h2>Roadmap & safety</h2>
+        <ul>
+          <li>Static analysis for unreachable states and unsafe transitions</li>
+          <li>Formal safety contracts for timing and geofence compliance</li>
+          <li>Full MAVSDK/ROS 2 integration</li>
+          <li>LSP and editor tooling</li>
+        </ul>
+        <p class="small">Status: Early Alpha. Not flight-certified.</p>
+      </section>
+    </article>
+  </div>
+</main>
